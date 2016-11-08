@@ -28,3 +28,10 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+ApocalypseCow/ApocalypseCow/Library/metadata/*
+ApocalypseCow/ApocalypseCow/Library/UnityAssemblies/*
+ApocalypseCow/ApocalypseCow/Library/ScriptAssemblies/*
+ApocalypseCow/ApocalypseCow/Library/CurrentLayout.dwlt
+ApocalypseCow/ApocalypseCow/Library/assetDatabase3
+ApocalypseCow/ApocalypseCow/Library/expandedItems
