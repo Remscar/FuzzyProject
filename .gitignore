@@ -29,9 +29,9 @@ sysinfo.txt
 *.apk
 *.unitypackage
 
-ApocalypseCow/ApocalypseCow/Library/metadata/*
-ApocalypseCow/ApocalypseCow/Library/UnityAssemblies/*
-ApocalypseCow/ApocalypseCow/Library/ScriptAssemblies/*
-ApocalypseCow/ApocalypseCow/Library/CurrentLayout.dwlt
-ApocalypseCow/ApocalypseCow/Library/assetDatabase3
-ApocalypseCow/ApocalypseCow/Library/expandedItems
+FuzzyLogic/Unity_Project/Library/metadata/*
+FuzzyLogic/Unity_Project/Library/UnityAssemblies/*
+FuzzyLogic/Unity_Project/Library/ScriptAssemblies/*
+FuzzyLogic/Unity_Project/Library/CurrentLayout.dwlt
+FuzzyLogic/Unity_Project/Library/assetDatabase3
+FuzzyLogic/Unity_Project/Library/expandedItems
