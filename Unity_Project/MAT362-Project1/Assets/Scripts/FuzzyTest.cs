@@ -15,6 +15,11 @@ public class FuzzyTest : MonoBehaviour {
     var triTest = FuzzyNumber.Triangular(0, 10, 20);
     var trapTest = FuzzyNumber.Trapezoidal(-20, -10, 0, 10);
 
+    float[] firingLevel = new float[2];
+
+    firingLevel[0] = triTest(5);
+    firingLevel[1] = trapTest(5);
+
     if (Input.GetKeyDown(KeyCode.Space))
     {
       DrawFuzzyNumber(trapTest, -20, 10, new Color(0, 1, 0));

@@ -116,10 +116,30 @@ public class CarController : MonoBehaviour {
   {
     bool turnSet = false;
 
+    MamdaniSolver turnSolver = new MamdaniSolver();
+    MamdaniSolver speedSolver = new MamdaniSolver();
+
+    turnSolver.AddAntecedent(FuzzyNumber.Triangular(0, 0, m_angleCastLength * .25f)); // near
+    turnSolver.AddAntecedent(FuzzyNumber.Triangular(m_angleCastLength * .25f, m_angleCastLength * .5f, m_angleCastLength * .75f)); // medium
+    turnSolver.AddAntecedent(FuzzyNumber.Triangular(m_angleCastLength * .75f, m_angleCastLength, m_angleCastLength)); // far
+
+    turnSolver.AddConsequence(FuzzyNumber.Triangular(m_maxTurnAngle * .75f, m_maxTurnAngle, m_maxTurnAngle), m_maxTurnAngle * .75f, m_maxTurnAngle); // turnSharp
+    turnSolver.AddConsequence(FuzzyNumber.Triangular(m_maxTurnAngle * .25f, m_maxTurnAngle * .50f, m_maxTurnAngle * .75f), m_maxTurnAngle * .25f, m_maxTurnAngle * .75f); // turnSlight
+    turnSolver.AddConsequence(FuzzyNumber.Triangular(0, 0, m_maxTurnAngle * .25f), 0, m_maxTurnAngle * .25f); // dontTurn
+
+    speedSolver.AddAntecedent(FuzzyNumber.Triangular(0, 0, m_forwardCastLength * .25f)); // near
+    speedSolver.AddAntecedent(FuzzyNumber.Triangular(m_forwardCastLength * .25f, m_forwardCastLength * .5f, m_forwardCastLength * .75f)); // medium
+    speedSolver.AddAntecedent(FuzzyNumber.Triangular(m_forwardCastLength * .75f, m_forwardCastLength, m_forwardCastLength)); // far
+
+    speedSolver.AddConsequence(FuzzyNumber.Triangular(0, 0, m_maxForwardSpeed * .25f), 0, m_maxForwardSpeed * .25f); // slowDown
+    speedSolver.AddConsequence(FuzzyNumber.Triangular(m_maxForwardSpeed * .25f, m_maxForwardSpeed * .50f, m_maxForwardSpeed * .75f), m_maxForwardSpeed * .25f, m_maxForwardSpeed * .75f); // easyGoes
+    speedSolver.AddConsequence(FuzzyNumber.Triangular(m_maxForwardSpeed * .75f, m_maxForwardSpeed, m_maxForwardSpeed), m_maxForwardSpeed * .75f, m_maxForwardSpeed); // racecar
+
     if (forwardCast != null)
     {
-      m_curSpeed = m_maxForwardSpeed / 4;
-      m_curTurnAngle = -m_maxTurnAngle;
+      m_curSpeed = speedSolver.Solve(m_forward.distance);
+      //m_curSpeed = m_maxForwardSpeed / 4;
+      //m_curTurnAngle = -m_maxTurnAngle;
       turnSet = true;
       //Debug.Log("Front Hit Distance:" + forwardCast.Value.distance.ToString());
     }
@@ -128,23 +148,34 @@ public class CarController : MonoBehaviour {
       m_curSpeed = m_maxForwardSpeed;
     }
 
+    float leftTurn = 0.0f;
+    float rightTurn = 0.0f;
+
     if (leftCast != null)
     {
+      rightTurn = turnSolver.Solve(m_left.distance);
       //Debug.Log("Hit Left:" + leftCast.Value.distance.ToString());
-      m_curTurnAngle = m_maxTurnAngle;
+      //m_curTurnAngle = m_maxTurnAngle;
       turnSet = true;
     }
 
     if (rightCast != null)
     {
       //Debug.Log("Hit Right:" + rightCast.Value.distance.ToString());
-      m_curTurnAngle = -m_maxTurnAngle;
+      leftTurn = -turnSolver.Solve(m_right.distance);
       turnSet = true;
     }
 
     if (!turnSet)
     {
       m_curTurnAngle = 0;
+    }
+    else
+    {
+      if (rightTurn >= -leftTurn)
+        m_curTurnAngle = rightTurn;
+      else
+        m_curTurnAngle = leftTurn;
     }
 
   }
